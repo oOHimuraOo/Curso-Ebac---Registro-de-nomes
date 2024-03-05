@@ -37,6 +37,7 @@ int main (){//Função responsavel pelo menu principal.
 				break;
 			case 4:
 				finlizar_programa();
+				return 0;
 				break;
 		
 			default:
@@ -296,7 +297,8 @@ int apagar_nome_via_cpf(){//Função responsavel por apagar entradas utilizando o 
 
 int finlizar_programa(){//Função responsavel por fechar o programa
 	printf("Você escolheu sair. \n");
-	system("pause");
+	printf("Obrigado por utilizar esse software. \n\n");
+	printf("software em desenvolvimento por Felipe Cerqueira. Aluno EBAC.");
 }
 
 int input_invalido(){//função responsavel para revelar que o usuario inseriu alguma informação invalida.
