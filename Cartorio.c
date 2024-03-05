@@ -6,45 +6,88 @@
 int main (){//Função responsavel pelo menu principal.
 	int opcoes_do_menu = 0; //Variável responsável por armazenar a opção escolhida pelo usuário.
 	int repeticao = 1;
+	char usuario_digitado[50];
+	char senha_digitada[50];
+	char verificador_de_senha[50] = "admin";
+	int valor = 0;
+	int valor_2 = 0;
 	
-	for (repeticao = 1; repeticao = 1;){ //O loop "for" pode ser utilizado dessa forma para criar um laço de repetição. Porem a logica padrão dele é for(x=0;x=10;x++) obs.: você pode fazer negativo também.
-		
+	setlocale(LC_ALL, "Portuguese"); //Função responsável por ativar a localização idiomática.
+	
+	printf("### Cartório da EBAC ### \n\n");
+	printf("por favor digite seu usuario: \n\n");
+	
+	printf("digite aqui: ");
+	scanf("%s",usuario_digitado);
+	
+	system("cls");
+	
+	valor = strcmp(usuario_digitado,verificador_de_senha);
+	//FILE *file;
+	//file = fopen(usuario_digitado,"r"); era pra ser assim, pois dessa forma você consegue buscar no banco de dados a informação de admin, mas como não posso inviabilizar o acesso dos professores. To mantendo da forma padrão.
+	
+	if (valor == 0){//tem que substituir essa linha por "if (file != NULL){"
+		printf("### Cartório da EBAC ### \n\n");
+		printf("Por favor digite sua senha: \n\n");
+	
+		printf("digite aqui: ");
+		scanf("%s",senha_digitada);
+	
 		system("cls");
 		
-		setlocale(LC_ALL, "Portuguese"); //Função responsável por ativar a localização idiomática.
+		//while(fgets(verificador_de_senha, 50, file) != NULL){ 
+		//}
+		//tem que descomentar as linhas 36 e 37
 		
-		printf("### Cartório da EBAC ### \n\n");
-		printf("Escolha a opção desejada do menu: \n\n");
-		printf("\t1) Registrar nomes. \n");
-		printf("\t2) Consultar nomes. \n");
-		printf("\t3) Apagar nomes. \n");
-		printf("\t4) Sair. \n\n\n");
+		valor_2 = strcmp(senha_digitada,verificador_de_senha);
 		
-		printf("Digite aqui: ");
-		scanf("%d", &opcoes_do_menu); //Função responsável por solicitar uma informação do usuário quando lidando com variáveis do tipo inteiro
-		
-		system("cls"); //Função responsável por limpar as informações impressas no inspetor anteriormente.
-		
-		switch (opcoes_do_menu){
-			case 1:
-				registrar_nomes();
-				break;
-			case 2:
-				consultar_nomes();
-				break;
-			case 3:
-				apagar_nomes();
-				break;
-			case 4:
-				finlizar_programa();
-				return 0;
-				break;
-		
-			default:
-				input_invalido();
-				break;
+		if (valor_2 == 0){//tem que substituir essa linha por "if (valor == 0){"
+			//fclose(file); tem que descomentar essa linha.
+			for (repeticao = 1; repeticao = 1;){ //O loop "for" pode ser utilizado dessa forma para criar um laço de repetição. Porem a logica padrão dele é for(x=0;x=10;x++) obs.: você pode fazer negativo também.
 			
+				system("cls");
+			
+				printf("### Cartório da EBAC ### \n\n");
+				printf("Escolha a opção desejada do menu: \n\n");
+				printf("\t1) Registrar nomes. \n");
+				printf("\t2) Consultar nomes. \n");
+				printf("\t3) Apagar nomes. \n");
+				printf("\t4) Sair. \n\n\n");
+			
+				printf("Digite aqui: ");
+				scanf("%d", &opcoes_do_menu); //Função responsável por solicitar uma informação do usuário quando lidando com variáveis do tipo inteiro
+			
+				system("cls"); //Função responsável por limpar as informações impressas no inspetor anteriormente.
+		
+				switch (opcoes_do_menu){
+					case 1:
+						registrar_nomes();
+						break;
+					case 2:
+						consultar_nomes();
+						break;
+					case 3:
+						apagar_nomes();
+						break;
+					case 4:
+						finlizar_programa();
+						return 0;
+						break;
+		
+					default:
+						input_invalido();
+						break;
+				}
+			}
 		}
+		else{
+			printf("senha não encontrada. \n");
+			printf("finalizando aplicação.");
+		}
+	}
+	else{
+		printf("usuario não encontrado. \n");
+		printf("finalizando aplicação.");
 	}
 }
 
