@@ -56,9 +56,12 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 	char matricula[100];
 	char conteudo[500];
 	int opcao_do_menu = 0;
+	int opcao_do_menu_2 = 0;
 
 	setlocale(LC_ALL, "Portuguese");
-
+	
+	system("cls");
+	
 	printf("Digite o CPF que você deseja cadastrar: ");
 	scanf("%s", cpf);//Função responsável por permitir que o usuário armazene informações em variáveis do tipo string.
 		
@@ -68,6 +71,8 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 	FILE *file; //Trecho responsável pela criação de arquivo.
 	file = fopen(matricula,"r");
 	if (file == NULL){
+		fclose(file);
+		
 		printf("Digite o nome: ");
 		scanf("%s", nome);
 	
@@ -112,6 +117,25 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 		file = fopen(matricula, "a");
 		fprintf(file, matricula);
 		fclose(file);	
+		
+		printf("Deseja inserir um novo nome?\n\n");
+		printf("\t1) Sim.\n");
+		printf("\t2) Não. \n\n");
+		
+		printf("Digite aqui: ");
+		scanf("%d",&opcao_do_menu_2);
+		switch (opcao_do_menu_2){
+			case 1:
+				registrar_nomes();
+				break;
+			case 2:
+				printf("Retornando para o menu principal.\n");
+				system("pause");
+				break;
+			default:
+				input_invalido();
+				break;
+		}
 	}
 	else {
 		printf("CPF já cadastrado. Deseja consultar informações do CPF?\n\n");
@@ -127,10 +151,9 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 			printf("%s", conteudo);
 			printf("\n\n");
 			}
+			fclose(file);
 		}
 	}
-	
-	system("pause");
 }
 
 int consultar_nomes(){//Função responsavel por verificar a forma de consulta que o usuario deseja executar.
