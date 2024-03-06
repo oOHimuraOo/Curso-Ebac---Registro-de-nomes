@@ -15,20 +15,18 @@ int main (){//Função responsavel pelo menu principal.
 	setlocale(LC_ALL, "Portuguese"); //Função responsável por ativar a localização idiomática.
 	
 	printf("### Cartório da EBAC ### \n\n");
-	printf("por favor digite seu usuario: \n\n");
+	printf("Por favor digite seu USUÁRIO: \n\n");
 	
 	printf("digite aqui: ");
 	scanf("%s",usuario_digitado);
 	
-	system("cls");
+	valor = strcmp(usuario_digitado,verificador_de_senha);//strcmp é a função que compara duas strings. Ela pode retornar 0 se elas forem iguais ou numeros > 0 ou numeros < 0.
 	
-	valor = strcmp(usuario_digitado,verificador_de_senha);
 	//FILE *file;
 	//file = fopen(usuario_digitado,"r"); era pra ser assim, pois dessa forma você consegue buscar no banco de dados a informação de admin, mas como não posso inviabilizar o acesso dos professores. To mantendo da forma padrão.
 	
 	if (valor == 0){//tem que substituir essa linha por "if (file != NULL){"
-		printf("### Cartório da EBAC ### \n\n");
-		printf("Por favor digite sua senha: \n\n");
+		printf("\n\nPor favor digite sua SENHA: \n\n");
 	
 		printf("digite aqui: ");
 		scanf("%s",senha_digitada);
@@ -70,7 +68,7 @@ int main (){//Função responsavel pelo menu principal.
 						apagar_nomes();
 						break;
 					case 4:
-						finlizar_programa();
+						finalizar_programa();
 						return 0;
 						break;
 		
@@ -81,7 +79,7 @@ int main (){//Função responsavel pelo menu principal.
 			}
 		}
 		else{
-			printf("senha não encontrada. \n");
+			printf("Senha invalida. \n");
 			printf("finalizando aplicação.");
 		}
 	}
@@ -100,7 +98,8 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 	char conteudo[500];
 	int opcao_do_menu = 0;
 	int opcao_do_menu_2 = 0;
-
+	int opcao_do_menu_3 = 0;
+	
 	setlocale(LC_ALL, "Portuguese");
 	
 	system("cls");
@@ -166,8 +165,8 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 		printf("\t2) Não. \n\n");
 		
 		printf("Digite aqui: ");
-		scanf("%d",&opcao_do_menu_2);
-		switch (opcao_do_menu_2){
+		scanf("%d",&opcao_do_menu);
+		switch (opcao_do_menu){
 			case 1:
 				registrar_nomes();
 				break;
@@ -186,15 +185,62 @@ int registrar_nomes(){//Função responsável por criar informações novas no banco 
 		printf("\t2) Não. \n\n");
 		
 		printf("Digite aqui: ");
-		scanf("%d", &opcao_do_menu);
+		scanf("%d", &opcao_do_menu_2);
 		
-		if (opcao_do_menu == 1){
-			while(fgets(conteudo, 500, file) != NULL){//Esse é o loop "while". Esse loop vai rodar enquanto o arquivo registrado na variável "file" possuir informação para ser armazenada na variável "conteúdo". Atenção: a quantidade máxima de informação que será armazenada na variável conteúdo é 500 caracteres.
-			printf("\nEssas são as informações de usuário desejadas:\n");
-			printf("%s", conteudo);
-			printf("\n\n");
-			}
-			fclose(file);
+		switch (opcao_do_menu_2){
+			case 1:
+				while(fgets(conteudo, 500, file) != NULL){//Esse é o loop "while". Esse loop vai rodar enquanto o arquivo registrado na variável "file" possuir informação para ser armazenada na variável "conteúdo". Atenção: a quantidade máxima de informação que será armazenada na variável conteúdo é 500 caracteres.
+				printf("\nEssas são as informações de usuário desejadas:\n");
+				printf("%s", conteudo);
+				printf("\n\n");
+				}
+				fclose(file);
+				printf("Deseja tentar novamente?\n\n");
+				printf("\t1) Sim.\n");
+				printf("\t2) Não. \n\n");
+					
+				printf("Digite aqui: ");
+				scanf("%d",&opcao_do_menu_3);
+				switch (opcao_do_menu_3){
+					case 1:
+						registrar_nomes();
+						break;
+					case 2:
+						printf("Retornando para o menu principal.\n");
+						system("pause");
+						break;
+					default:
+						input_invalido();
+						registrar_nomes();
+						break;
+				}
+			case 2:
+				fclose(file);
+				printf("Deseja tentar novamente?\n\n");
+				printf("\t1) Sim.\n");
+				printf("\t2) Não. \n\n");
+					
+				printf("Digite aqui: ");
+				scanf("%d",&opcao_do_menu_3);
+				switch (opcao_do_menu_3){
+					case 1:
+						registrar_nomes();
+						break;
+					case 2:
+						printf("Retornando para o menu principal.\n");
+						system("pause");
+						break;
+					default:
+						input_invalido();
+						registrar_nomes();
+						break;
+				}
+				break;
+			default:
+				fclose(file);
+				input_invalido();
+				registrar_nomes();
+				break;
 		}
 	}
 }
@@ -218,16 +264,96 @@ int consultar_nomes(){//Função responsavel por verificar a forma de consulta que
 			verificar_via_cpf();
 			break;
 		case 2:
-			printf("Infelizmente essa opção está temporariamente indisponível. \n");
-			system("pause");
+			verificar_via_matricula();
 			break;
 		default:
-			printf("Opção invalida. \n");
-			system("pause");
+			input_invalido();
 			consultar_nomes();
 			break;
 	}
+}
+
+int verificar_via_matricula(){//Função responsavel por fazer a busca no banco de dados e apresentar a informação para cliente atraves do numero da matricula fornecida pelo usuario.
+	char matricula[100];
+	char conteudo[500];
+	int opcao_do_menu = 0;
 	
+	setlocale(LC_ALL, "Portuguese");
+	
+	system("cls");
+	
+	printf("Por favor digite a matricula desejada: ");
+	scanf("%s", matricula);
+	printf("\n");
+	
+	FILE *file;
+	file = fopen(matricula, "r");
+
+	if (file == NULL){
+		fclose(file);
+		printf("Matricula não encontrada. \n");
+		printf("deseja tentar novamente?. \n\n");
+		printf("\t1) Sim \n");
+		printf("\t2) Não \n");
+		printf("\t3) voltar para o menu principal\n\n");
+		
+		printf("Digite aqui: ");
+		scanf("%d", &opcao_do_menu);
+		
+		switch (opcao_do_menu){
+			case 1:
+				verificar_via_matricula();	
+				break;
+			case 2:
+				consultar_nomes();
+				break;
+			case 3:
+				printf("Voltando para o menu principal.\n");
+				system("pause");
+				break;
+			default:
+				input_invalido();
+				consultar_nomes();
+				break;
+		}
+	}
+	else{
+		printf("Matricula encontrada! \n");
+		
+		while(fgets(conteudo, 500, file) != NULL){
+			printf("\nEssas são as informações de usuário desejadas:\n");
+			printf("%s", conteudo);
+			printf("\n\n");
+		}
+		fclose(file);
+		
+		system("pause");
+		
+		printf("deseja consultar um novo nome via Matricula? \n\n");
+		printf("\t1) Sim \n");
+		printf("\t2) Não \n");
+		printf("\t3) voltar para o menu principal \n\n");
+		
+		printf("Digite aqui: ");
+		scanf("%d", &opcao_do_menu);
+		
+		switch (opcao_do_menu){
+			case 1:
+				verificar_via_matricula();	
+				break;
+			case 2:
+				consultar_nomes();
+				break;
+			case 3:
+				printf("Voltando para o menu principal.\n");
+				system("pause");
+				break;
+			default:
+				input_invalido();
+				consultar_nomes();
+				break;
+		}
+	}
 }
 
 int verificar_via_cpf(){//Função responsavel por puxar as informações do usuario via CPF.
@@ -247,19 +373,32 @@ int verificar_via_cpf(){//Função responsavel por puxar as informações do usuario
 	file = fopen(cpf, "r");
 
 	if (file == NULL){
+		fclose(file);
 		printf("CPF não encontrado. \n");
 		printf("deseja tentar novamente?. \n\n");
 		printf("\t1) Sim \n");
 		printf("\t2) Não \n");
+		printf("\t3) voltar para o menu principal.\n\n");
 		
 		printf("Digite aqui: ");
 		scanf("%d", &opcao_do_menu);
 		
-		if (opcao_do_menu == 1){
-			verificar_via_cpf();	
+		switch (opcao_do_menu){
+			case 1:
+				verificar_via_cpf();
+				break;
+			case 2:
+				consultar_nomes();
+				break;
+			case 3:
+				printf("Voltando para o menu principal.\n");
+				system("pause");
+				break;
+			default:
+				input_invalido();
+				consultar_nomes();
+				break;
 		}
-		else
-			consultar_nomes();
 	}
 	else{
 		printf("CPF encontrado! \n");
@@ -269,37 +408,63 @@ int verificar_via_cpf(){//Função responsavel por puxar as informações do usuario
 			printf("%s", conteudo);
 			printf("\n\n");
 		}
-	}
+		fclose(file);
+		printf("deseja consultar um novo nome via CPF? \n\n");
+		printf("\t1) Sim \n");
+		printf("\t2) Não \n");
+		printf("\t3) Voltar para o menu principal.\n\n");
 		
-	fclose(file);	
-	system("pause");
+		printf("Digite aqui: ");
+		scanf("%d", &opcao_do_menu);
+		
+		switch (opcao_do_menu){
+			case 1:
+				verificar_via_cpf();
+				break;
+			case 2:
+				consultar_nomes();
+				break;
+			case 3:
+				printf("Voltando para o menu principal.\n");
+				system("pause");
+				break;
+			default:
+				input_invalido();
+				consultar_nomes();
+				break;
+		}
+	}
 }
 
 int apagar_nomes(){//Função responsavel por verificar a forma que o usuario deseja encontrar o iten a ser apagado.
-	int opcao_do_menu_1 = 0;
+	int opcao_do_menu = 0;
 
 	setlocale(LC_ALL, "Portuguese");
 	
 	system ("cls");
 	
 	printf("Como você deseja encontrar qual item você deseja apagar? \n\n");
-	printf("\t1)CPF.\n");
-	printf("\t2)Matricula. \n\n");
+	printf("\t1) CPF.\n");
+	printf("\t2) Matricula. \n");
+	printf("\t3) Voltar para o menu principal.\n\n");
 	
 	printf("Digite aqui: ");
-	scanf("%d",&opcao_do_menu_1);
+	scanf("%d",&opcao_do_menu);
 	
-	switch (opcao_do_menu_1){
+	switch (opcao_do_menu){
 		case 1:
 			apagar_nome_via_cpf();
 			break;
 		case 2:
-			printf("Infelizmente essa opção está temporariamente indisponível. \n");
+			apagar_nome_via_matricula();
+			break;
+		case 3:
+			printf("Voltando para o menu principal.\n");
 			system("pause");
-			apagar_nomes();
 			break;
 		default:
 			input_invalido();
+			apagar_nomes();
 			break;
 	}	
 }
@@ -308,6 +473,7 @@ int apagar_nome_via_cpf(){//Função responsavel por apagar entradas utilizando o 
 	char cpf[100];
 	char conteudo[500];
 	int opcao_do_menu = 0;
+	int opcao_do_menu_2 = 0;
 	
 	setlocale(LC_ALL, "Portuguese");
 	
@@ -340,6 +506,115 @@ int apagar_nome_via_cpf(){//Função responsavel por apagar entradas utilizando o 
 					remove(cpf);
 					printf("Entrada apagada com sucesso!\n\n");
 					system("pause");
+					
+					system("cls");
+					
+					printf("Deseja apagar outro nome via CPF?\n\n");
+					printf("\t1) Sim.\n");
+					printf("\t2) Não. \n");
+					printf("\t3) voltar para o menu principal. \n\n");
+					
+					printf("Digite aqui: ");
+					scanf("%d", &opcao_do_menu_2);
+					switch (opcao_do_menu_2){
+						case 1:
+							apagar_nome_via_cpf();
+							break;
+						case 2:
+							apagar_nomes();
+							break;
+						case 3:
+							printf("Voltando para o menu principal.\n");
+							system("pause");
+							break;
+						default:
+							input_invalido();
+							apagar_nomes();
+							break;
+					}
+					break;
+				case 2:
+					fclose(file);
+					apagar_nomes();
+					break;
+				default:
+					fclose(file);
+					input_invalido();
+					break;
+			}
+		}
+	}
+	else{
+		system("cls");
+		fclose(file);
+		printf("CPF não cadastrado. \n\n");
+		system("pause");
+	}
+}
+
+int apagar_nome_via_matricula(){//Função responsavel por apagar entradas utilizando a matricula.
+	char matricula[100];
+	char conteudo[500];
+	int opcao_do_menu = 0;
+	int opcao_do_menu_2 = 0;
+	
+	setlocale(LC_ALL, "Portuguese");
+	
+	system("cls");
+	
+	printf("Digite aqui a matricula desejada: ");
+	scanf("%s",matricula);
+	
+	FILE *file;
+	file= fopen(matricula,"r");
+		
+	if (file != NULL){
+		printf("A matricula encontrada corresponde a seguinte informação:\n\n");
+			
+		while(fgets(conteudo, 500, file) != NULL){
+			printf("%s", conteudo);
+			printf("\n\n");
+			
+			printf("você deseja apagar essa entrada do banco de dados? \n\n");
+			printf("\t1)Sim.\n");
+			printf("\t2)Não.\n\n");
+				
+			printf("Digite aqui: ");
+			scanf("%d", &opcao_do_menu);
+				
+			switch (opcao_do_menu){
+				case 1:
+					system("cls");
+					fclose(file);
+					remove(matricula);
+					printf("Entrada apagada com sucesso!\n\n");
+					system("pause");
+					
+					system("cls");
+					
+					printf("Deseja apagar outro nome via Matricula?\n\n");
+					printf("\t1) Sim.\n");
+					printf("\t2) Não. \n");
+					printf("\t3) voltar para o menu principal. \n\n");
+					
+					printf("Digite aqui: ");
+					scanf("%d", &opcao_do_menu_2);
+					switch (opcao_do_menu_2){
+						case 1:
+							apagar_nome_via_matricula();
+							break;
+						case 2:
+							apagar_nomes();
+							break;
+						case 3:
+							printf("Voltando para o menu principal.\n");
+							system("pause");
+							break;
+						default:
+							input_invalido();
+							apagar_nomes();
+							break;
+					}
 					break;
 		
 				case 2:
@@ -356,12 +631,12 @@ int apagar_nome_via_cpf(){//Função responsavel por apagar entradas utilizando o 
 	}
 	else{
 		system("cls");
-		printf("CPF não cadastrado. \n\n");
+		printf("Matricula não cadastrada. \n\n");
 		system("pause");
 	}
 }
 
-int finlizar_programa(){//Função responsavel por fechar o programa
+int finalizar_programa(){//Função responsavel por fechar o programa
 	printf("Você escolheu sair. \n");
 	printf("Obrigado por utilizar esse software. \n\n");
 	printf("software em desenvolvimento por Felipe Cerqueira. Aluno EBAC.");
